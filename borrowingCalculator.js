@@ -15,11 +15,21 @@ const INTEREST_RATE = 7.0; // 7.0% baseline interest rate
 const ASSESSMENT_RATE_BUFFER = 3.0; // 3.0% buffer added to interest rates
 
 // Legacy placeholder functions to replace with API calls
-function getTax(income) {
-    // REPLACE THIS
-    // Write your TAX API call code here.
-    return Math.round(income * 0.25);
-}
+async function getTax(income) {
+  const url = `http://localhost:3000/api/tax?income=${income}`;
+
+  const data = await fetch(url, {
+    method: 'GET',
+    headers: {
+    'Authorization': 'Bearer pat_abcdefghijklmnopqrstuvwxyz0123456789',
+    }
+  })
+
+  const json = await data.json()
+
+  const tax = Math.round(json.tax);
+  return tax;
+};
 
 function getHEM(income, dependents) {
     // REPLACE THIS
