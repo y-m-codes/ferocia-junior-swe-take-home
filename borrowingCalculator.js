@@ -1,10 +1,10 @@
 /**
  * Borrowing Power Calculator
- * 
- * Gen's incomplete prototype. 
+ *
+ * Gen's incomplete prototype.
  * This currently calculates what a user can borrow over 30 years.
- * Currently this code uses placeholder methods for Tax and HEM values. 
- * 
+ * Currently this code uses placeholder methods for Tax and HEM values.
+ *
  * TODO: Refactor the code to pull Tax and HEM values from an API call.
  * A server.js has been provided to supply these values.
  */
@@ -74,7 +74,7 @@ function runConsoleMode() {
         rl.question("Number of Dependents: ", (dependents) => {
             rl.question("Declared Monthly Expenses: $", (expenses) => {
                 rl.question("Total Credit Card Limits: $", (creditLimits) => {
-                    
+
                     // Banks assess loans using base rate + buffer for safety
                     const assessmentRate = INTEREST_RATE + ASSESSMENT_RATE_BUFFER;
 
@@ -89,7 +89,7 @@ function runConsoleMode() {
                     console.log("\n--- Calculation Summary ---");
                     console.log(`Maximum Borrowing Power at ${INTEREST_RATE}%: $${result.maxLoanAmount.toLocaleString()}`);
                     console.log(`Assumed Monthly Mortgage Repayment: $${result.monthlyRepayment.toLocaleString()} over 30 years`);
-                    
+
                     rl.close();
                 });
             });
