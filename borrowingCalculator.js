@@ -9,6 +9,10 @@
  * A server.js has been provided to supply these values.
  */
 
+// Import module to enable terminal read/write with Promise handling
+const readline = require('readline/promises');
+const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+
 // Global constant for mortgage simulation
 const LOAN_TERM_MONTHS = 360; // 30 Years
 const INTEREST_RATE = 7.0; // 7.0% baseline interest rate
@@ -80,44 +84,59 @@ async function calculateBorrowingPower(income, dependents, expenses, creditLimit
     const maxLoanAmount = maxMonthlyRepayment * ((1 - Math.pow(1 + monthlyRate, - LOAN_TERM_MONTHS)) / monthlyRate);
 
     return {
-        maxLoanAmount: Number(maxLoanAmount.toFixed(2)),
-        monthlyRepayment: Number(maxMonthlyRepayment.toFixed(2))
+      maxLoanAmount: Number(maxLoanAmount.toFixed(2)),
+      monthlyRepayment: Number(maxMonthlyRepayment.toFixed(2))
     };
 }
 
+async function getIncome() {
+  const income = await rl.question("Gross Annual Income: $");
+  return income
+};
+
+async function getDependents() {
+  const dependents = await rl.question("Number of Dependents: ");
+  return dependents
+};
+
+async function getExpenses() {
+  const expenses = await rl.question("Declared Monthly Expenses: $");
+  return expenses
+};
+
+async function getCreditLimits() {
+  const creditLimits = await rl.question("Total Credit Card Limits: $");
+  return creditLimits
+};
+
 async function runConsoleMode() {
-    const readline = require('readline');
-    const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+  console.log("Mortgage Borrowing Power Calculator");
+  console.log("===================================");
 
-    console.log("Mortgage Borrowing Power Calculator");
-    console.log("===================================");
+  const income = await getIncome();
 
-    rl.question("Gross Annual Income: $", (income) => {
-        rl.question("Number of Dependents: ", (dependents) => {
-            rl.question("Declared Monthly Expenses: $", (expenses) => {
-                rl.question("Total Credit Card Limits: $", async (creditLimits) => {
+  const dependents = await getDependents();
 
-                    // Banks assess loans using base rate + buffer for safety
-                    const assessmentRate = INTEREST_RATE + ASSESSMENT_RATE_BUFFER;
+  const expenses = await getExpenses();
 
-                    const result = await calculateBorrowingPower(
-                        parseFloat(income),
-                        parseInt(dependents),
-                        parseFloat(expenses),
-                        parseFloat(creditLimits),
-                        assessmentRate
-                    );
+  const creditLimits = await getCreditLimits();
 
-                    console.log("\n--- Calculation Summary ---");
-                    console.log(`Maximum Borrowing Power at ${INTEREST_RATE}%: $${result.maxLoanAmount.toLocaleString()}`);
-                    console.log(`Assumed Monthly Mortgage Repayment: $${result.monthlyRepayment.toLocaleString()} over 30 years`);
+  const assessmentRate = INTEREST_RATE + ASSESSMENT_RATE_BUFFER;
 
-                    rl.close();
-                });
-            });
-        });
-    });
-}
+  const result = await calculateBorrowingPower(
+    parseFloat(income),
+    parseInt(dependents),
+    parseFloat(expenses),
+    parseFloat(creditLimits),
+    assessmentRate,
+  );
+
+  console.log("\n--- Calculation Summary ---");
+  console.log(`Maximum Borrowing Power at ${INTEREST_RATE}%: $${result.maxLoanAmount.toLocaleString()}`);
+  console.log(`Assumed Monthly Mortgage Repayment: $${result.monthlyRepayment.toLocaleString()} over 30 years`);
+
+  rl.close();
+};
 
 if (require.main === module) {
     runConsoleMode();
