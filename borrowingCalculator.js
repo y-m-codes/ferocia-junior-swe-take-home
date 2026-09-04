@@ -33,7 +33,6 @@ async function getTax(income) {
     case 200:
       const json = await data.json()
       const tax = Math.round(json.tax);
-      console.log(tax);
       return tax;
     case 401:
       throw new Error("Error: You are not authorised to access this data")
