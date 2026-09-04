@@ -58,11 +58,22 @@ async function getHEM(income, dependents) {
     }
   })
 
-  const json = await data.json()
-
-  const hem = json.hem;
-
-  return hem;
+  switch (data.status) {
+    case 200:
+      const json = await data.json()
+      const hem = json.hem;
+      return hem;
+    case 401:
+      throw new Error("Error: You are not authorised to access this data")
+    case 400:
+      throw new Error("Error: Missing, malformed, or invalid inputs")
+    case 404:
+      throw new Error("Error: Request is not valid")
+    case 405:
+      throw new Error("Error: Request type is not permitted")
+    default:
+      throw new Error("Error: Unknown type - please try again")
+  }
 };
 
 /**
