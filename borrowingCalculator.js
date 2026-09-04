@@ -91,45 +91,52 @@ async function calculateBorrowingPower(income, dependents, expenses, creditLimit
     maxLoanAmount: Number(maxLoanAmount.toFixed(2)),
     monthlyRepayment: Number(maxMonthlyRepayment.toFixed(2))
   };
+};
+
+// An array of prompts for user input
+const prompts = [
+  {
+    name: "income",
+    question: "Gross Annual Income: $",
+    parse: parseFloat,
+    validators: [
+      {test: i => i < 0, message: "Negative income is not allowed."} // throw error message when function returns true
+    ],
+  },
+  { name: "dependents",
+    question: "Number of Dependents: ",
+    parse: parseInt,
+    validators: [
+      {test: i => i < 0, message: "Negative dependents are not allowed."},
+      {test: i => i > 3, message: "Our models are based off a maximum of 3 dependents."}
+    ],
+  },
+  { name: "expenses",
+    question: "Declared Monthly Expenses: $",
+    parse: parseFloat,
+    validators: [
+      {test: i => i < 0, message: "Negative expenses are not allowed."}
+    ],
+  },
+  { name: "creditLimits",
+    question: "Total Credit Card Limits: $",
+    parse: parseFloat,
+    validators: [
+      {test: i => i < 0, message: "Negative credit limits are not allowed."}
+    ],
+  },
+];
+
+async function askAndValidate({question, parse, validators}) {
+  const raw = await rl.question(question);
+  const input = parse(raw);
+  for (const v of validators) {
+    if (v.test(input)) {
+      throw new Error(v.message)
+    }
+  };
+  return input
 }
-
-async function getIncome() {
-  const income = await rl.question("Gross Annual Income: $");
-  if (income < 0) {
-    throw new Error("Negative income is not allowed.")
-  } else {
-    return income
-  }
-};
-
-async function getDependents() {
-  const dependents = await rl.question("Number of Dependents: ");
-  if (dependents < 0) {
-    throw new Error("Negative dependents are not allowed.")
-  } else if (dependents > 3) {
-    throw new Error("Our models are based off a maximum of 3 dependents.")
-  } else {
-    return dependents
-  }
-};
-
-async function getExpenses() {
-  const expenses = await rl.question("Declared Monthly Expenses: $");
-  if (expenses < 0) {
-    throw new Error("Negative expenses are not allowed.")
-  } else {
-    return expenses
-  }
-};
-
-async function getCreditLimits() {
-  const creditLimits = await rl.question("Total Credit Card Limits: $");
-  if (creditLimits < 0) {
-    throw new Error("Negative credit limits are not allowed.")
-  } else {
-    return creditLimits
-  }
-};
 
 async function runConsoleMode() {
   console.log("Mortgage Borrowing Power Calculator");
@@ -137,26 +144,18 @@ async function runConsoleMode() {
 
   const assessmentRate = INTEREST_RATE + ASSESSMENT_RATE_BUFFER;
 
-  let income = 0;
-  let dependents = 0;
-  let expenses = 0;
-  let creditLimits = 0;
-  let result = 0;
-
   try {
-    income = await getIncome();
+    let answers = {};
 
-    dependents = await getDependents();
-
-    expenses = await getExpenses();
-
-    creditLimits = await getCreditLimits();
+    for (const prompt of prompts) {
+      answers[prompt.name] = await askAndValidate(prompt)
+    }
 
     result = await calculateBorrowingPower(
-      parseFloat(income),
-      parseInt(dependents),
-      parseFloat(expenses),
-      parseFloat(creditLimits),
+      answers.income,
+      answers.dependents,
+      answers.expenses,
+      answers.creditLimits,
       assessmentRate,
     );
 
@@ -165,7 +164,6 @@ async function runConsoleMode() {
     console.log(`Assumed Monthly Mortgage Repayment: $${result.monthlyRepayment.toLocaleString()} over 30 years`);
   } catch (e) {
     console.log(e.message);
-    return
   } finally {
     rl.close();
   }
