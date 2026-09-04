@@ -19,9 +19,7 @@ const INTEREST_RATE = 7.0; // 7.0% baseline interest rate
 const ASSESSMENT_RATE_BUFFER = 3.0; // 3.0% buffer added to interest rates
 
 // Legacy placeholder functions to replace with API calls
-async function getTax(income) {
-  const url = `http://localhost:3000/api/tax?income=${income}`;
-
+async function callAPI(url) {
   const data = await fetch(url, {
     method: 'GET',
     headers: {
@@ -32,8 +30,7 @@ async function getTax(income) {
   switch (data.status) {
     case 200:
       const json = await data.json()
-      const tax = Math.round(json.tax);
-      return tax;
+      return json
     case 401:
       throw new Error("Error: You are not authorised to access this data")
     case 400:
@@ -47,32 +44,18 @@ async function getTax(income) {
   }
 };
 
+async function getTax(income) {
+  const url = `http://localhost:3000/api/tax?income=${income}`;
+  const json = await callAPI(url);
+  const tax = Math.round(json.tax);
+  return tax;
+};
+
 async function getHEM(income, dependents) {
   const url = `http://localhost:3000/api/hem?income=${income}&dependents=${dependents}`;
-
-  const data = await fetch(url, {
-    method: 'GET',
-    headers: {
-    'Authorization': 'Bearer pat_abcdefghijklmnopqrstuvwxyz0123456789',
-    }
-  })
-
-  switch (data.status) {
-    case 200:
-      const json = await data.json()
-      const hem = json.hem;
-      return hem;
-    case 401:
-      throw new Error("Error: You are not authorised to access this data")
-    case 400:
-      throw new Error("Error: Missing, malformed, or invalid inputs")
-    case 404:
-      throw new Error("Error: Request is not valid")
-    case 405:
-      throw new Error("Error: Request type is not permitted")
-    default:
-      throw new Error("Error: Unknown type - please try again")
-  }
+  const json = await callAPI(url);
+  const hem = json.hem;
+  return hem;
 };
 
 /**
