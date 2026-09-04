@@ -27,12 +27,25 @@ async function getTax(income) {
     headers: {
     'Authorization': 'Bearer pat_abcdefghijklmnopqrstuvwxyz0123456789',
     }
-  })
+  });
 
-  const json = await data.json()
-
-  const tax = Math.round(json.tax);
-  return tax;
+  switch (data.status) {
+    case 200:
+      const json = await data.json()
+      const tax = Math.round(json.tax);
+      console.log(tax);
+      return tax;
+    case 401:
+      throw new Error("Error: You are not authorised to access this data")
+    case 400:
+      throw new Error("Error: Missing, malformed, or invalid inputs")
+    case 404:
+      throw new Error("Error: Request is not valid")
+    case 405:
+      throw new Error("Error: Request type is not permitted")
+    default:
+      throw new Error("Error: Unknown type - please try again")
+  }
 };
 
 async function getHEM(income, dependents) {
