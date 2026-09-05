@@ -106,6 +106,7 @@ const prompts = [
     question: "Gross Annual Income: $",
     parse: parseFloat,
     validators: [
+      {test: i => !isNaN(i), message: "Income must be a number."}, // handles empty, string or other non-Number inputs
       {test: i => i >= 0, message: "Negative income is not allowed."} // throw error message when function returns false
     ],
   },
@@ -113,6 +114,7 @@ const prompts = [
     question: "Number of Dependents: ",
     parse: parseFloat,
     validators: [
+      {test: i => !isNaN(i), message: "Dependents must be a number."},
       {test: i => i >= 0, message: "Negative dependents are not allowed."},
       {test: i => i <= 3, message: "Our models are based off a maximum of 3 dependents."},
       {test: i => Number.isInteger(i), message: "Dependents must be a whole number."}
@@ -122,6 +124,7 @@ const prompts = [
     question: "Declared Monthly Expenses: $",
     parse: parseFloat,
     validators: [
+      {test: i => !isNaN(i), message: "Expenses must be a number."},
       {test: i => i >= 0, message: "Negative expenses are not allowed."}
     ],
   },
@@ -129,6 +132,7 @@ const prompts = [
     question: "Total Credit Card Limits: $",
     parse: parseFloat,
     validators: [
+      {test: i => !isNaN(i), message: "Credit limits must be a number."},
       {test: i => i >= 0, message: "Negative credit limits are not allowed."}
     ],
   },
