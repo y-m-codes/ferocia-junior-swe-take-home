@@ -106,29 +106,29 @@ const prompts = [
     question: "Gross Annual Income: $",
     parse: parseFloat,
     validators: [
-      {test: i => i < 0, message: "Negative income is not allowed."} // throw error message when function returns true
+      {test: i => i >= 0, message: "Negative income is not allowed."} // throw error message when function returns false
     ],
   },
   { name: "dependents",
     question: "Number of Dependents: ",
     parse: parseInt,
     validators: [
-      {test: i => i < 0, message: "Negative dependents are not allowed."},
-      {test: i => i > 3, message: "Our models are based off a maximum of 3 dependents."}
+      {test: i => i >= 0, message: "Negative dependents are not allowed."},
+      {test: i => i <= 3, message: "Our models are based off a maximum of 3 dependents."}
     ],
   },
   { name: "expenses",
     question: "Declared Monthly Expenses: $",
     parse: parseFloat,
     validators: [
-      {test: i => i < 0, message: "Negative expenses are not allowed."}
+      {test: i => i >= 0, message: "Negative expenses are not allowed."}
     ],
   },
   { name: "creditLimits",
     question: "Total Credit Card Limits: $",
     parse: parseFloat,
     validators: [
-      {test: i => i < 0, message: "Negative credit limits are not allowed."}
+      {test: i => i >= 0, message: "Negative credit limits are not allowed."}
     ],
   },
 ];
@@ -137,7 +137,7 @@ async function askAndValidate({question, parse, validators}) {
   const raw = await rl.question(question);
   const input = parse(raw);
   for (const v of validators) {
-    if (v.test(input)) {
+    if (v.test(input) == false) {
       throw new Error(v.message)
     }
   };
