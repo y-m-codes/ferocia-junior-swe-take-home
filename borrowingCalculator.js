@@ -162,7 +162,7 @@ async function runConsoleMode() {
       answers[prompt.name] = await askAndValidate(prompt)
     }
 
-    result = await calculateBorrowingPower(
+    const result = await calculateBorrowingPower(
       answers.income,
       answers.dependents,
       answers.expenses,
