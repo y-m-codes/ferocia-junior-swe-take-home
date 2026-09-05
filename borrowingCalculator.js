@@ -142,7 +142,7 @@ async function askAndValidate({question, parse, validators}) {
   const raw = await rl.question(question);
   const input = parse(raw);
   for (const v of validators) {
-    if (v.test(input) == false) {
+    if (v.test(input) === false) {
       throw new Error(v.message)
     }
   };
