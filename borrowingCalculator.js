@@ -61,6 +61,12 @@ async function getHEM(income, dependents) {
  * Calculates the total borrowing power amount and the monthly repayment configuration
  */
 async function calculateBorrowingPower(income, dependents, expenses, creditLimits, annualAssessmentRate) {
+  const noLoan = { maxLoanAmount: 0, monthlyRepayment: 0 };
+
+  if (income < 0 || dependents < 0 || expenses < 0 || creditLimits < 0) {
+      return noLoan
+  }
+
   // 1. Calculate Net Monthly Income after tax deductions
   const annualTax = await getTax(income);
   const netMonthlyIncome = (income - annualTax) / 12;
@@ -77,7 +83,7 @@ async function calculateBorrowingPower(income, dependents, expenses, creditLimit
 
   // Return early if user cannot afford a loan at all
   if (maxMonthlyRepayment <= 0) {
-      return { maxLoanAmount: 0, monthlyRepayment: 0 };
+      return noLoan
   }
 
   // 5. Calculate the monthly interest rate
