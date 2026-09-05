@@ -111,10 +111,11 @@ const prompts = [
   },
   { name: "dependents",
     question: "Number of Dependents: ",
-    parse: parseInt,
+    parse: parseFloat,
     validators: [
       {test: i => i >= 0, message: "Negative dependents are not allowed."},
-      {test: i => i <= 3, message: "Our models are based off a maximum of 3 dependents."}
+      {test: i => i <= 3, message: "Our models are based off a maximum of 3 dependents."},
+      {test: i => Number.isInteger(i), message: "Dependents must be a whole number."}
     ],
   },
   { name: "expenses",
