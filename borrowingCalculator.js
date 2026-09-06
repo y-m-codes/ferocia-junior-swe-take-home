@@ -1,14 +1,3 @@
-/**
- * Borrowing Power Calculator
- *
- * Gen's incomplete prototype.
- * This currently calculates what a user can borrow over 30 years.
- * Currently this code uses placeholder methods for Tax and HEM values.
- *
- * TODO: Refactor the code to pull Tax and HEM values from an API call.
- * A server.js has been provided to supply these values.
- */
-
 // Import module to enable terminal read/write with Promise handling
 const readline = require('readline/promises');
 const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
@@ -100,6 +89,7 @@ async function calculateBorrowingPower(income, dependents, expenses, creditLimit
 };
 
 // An array of prompts for user input
+// Tests throw error when function returns false
 const prompts = [
   {
     name: "income",
@@ -107,7 +97,7 @@ const prompts = [
     parse: parseFloat,
     validators: [
       {test: i => !isNaN(i), message: "Income must be a number."}, // handles empty, string or other non-Number inputs
-      {test: i => i >= 0, message: "Negative income is not allowed."} // throw error message when function returns false
+      {test: i => i >= 0, message: "Negative income is not allowed."}
     ],
   },
   { name: "dependents",

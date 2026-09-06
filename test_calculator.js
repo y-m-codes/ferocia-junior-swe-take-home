@@ -6,12 +6,12 @@
 const assert = require('assert');
 const {calculateBorrowingPower} = require('./borrowingCalculator');
 
-describe('Borrowing Power Calculator Tests', () => { // Updated title to reflect calculator
+describe('Borrowing Power Calculator Tests', () => {
 
    it('should calculate borrowing power for standard values', async () => {
-    const result = await calculateBorrowingPower(120000, 2, 3000, 10000, 10); // Updated annual assessment rate to 10.0% per the variables in borrowingCalculator.js
+    const result = await calculateBorrowingPower(120000, 2, 3000, 10000, 10);
     assert.ok(result.maxLoanAmount > 0, 'Should yield a positive borrowing power amount');
-    assert.strictEqual(result.monthlyRepayment, 4600); // Updated the expected test value to match the actual maths
+    assert.strictEqual(result.monthlyRepayment, 4600);
   });
 
   it('should return 0 for invalid negative income', async () => {
