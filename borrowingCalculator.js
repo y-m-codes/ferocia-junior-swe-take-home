@@ -94,7 +94,6 @@ const prompts = [
   {
     name: "income",
     question: "Gross Annual Income: $",
-    parse: parseFloat,
     validators: [
       {test: i => !isNaN(i), message: "Income must be a number."}, // handles empty, string or other non-Number inputs
       {test: i => i >= 0, message: "Negative income is not allowed."}
@@ -102,7 +101,6 @@ const prompts = [
   },
   { name: "dependents",
     question: "Number of Dependents: ",
-    parse: parseFloat,
     validators: [
       {test: i => !isNaN(i), message: "Dependents must be a number."},
       {test: i => i >= 0, message: "Negative dependents are not allowed."},
@@ -112,7 +110,6 @@ const prompts = [
   },
   { name: "expenses",
     question: "Declared Monthly Expenses: $",
-    parse: parseFloat,
     validators: [
       {test: i => !isNaN(i), message: "Expenses must be a number."},
       {test: i => i >= 0, message: "Negative expenses are not allowed."}
@@ -120,7 +117,6 @@ const prompts = [
   },
   { name: "creditLimits",
     question: "Total Credit Card Limits: $",
-    parse: parseFloat,
     validators: [
       {test: i => !isNaN(i), message: "Credit limits must be a number."},
       {test: i => i >= 0, message: "Negative credit limits are not allowed."}
@@ -128,9 +124,9 @@ const prompts = [
   },
 ];
 
-async function askAndValidate({question, parse, validators}) {
+async function askAndValidate({question, validators}) {
   const raw = await rl.question(question);
-  const input = parse(raw);
+  const input = parseFloat(raw);
   for (const v of validators) {
     if (v.test(input) === false) {
       throw new Error(v.message)
