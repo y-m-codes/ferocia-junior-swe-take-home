@@ -14,6 +14,7 @@ const REQUEST_TIMEOUT_MS = 5000;
 async function callAPI(url) {
   let data;
 
+  // Network level failures (server down, DNS, timeout) throw here
   try {
     data = await fetch(url, {
       method: 'GET',
@@ -26,6 +27,7 @@ async function callAPI(url) {
     throw new Error("Error: API is down or unreachable.");
   }
 
+  // HTTP level failures (server replied, but with an error code)
   switch (data.status) {
     case 200:
       return await data.json()
@@ -153,6 +155,7 @@ async function runConsoleMode() {
   const assessmentRate = INTEREST_RATE + ASSESSMENT_RATE_BUFFER;
 
   try {
+    // Connectivity check: fails fast if the API is down before asking the user anything
     await checkAPI();
 
     console.log("Mortgage Borrowing Power Calculator");
