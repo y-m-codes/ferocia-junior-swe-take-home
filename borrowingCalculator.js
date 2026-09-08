@@ -52,7 +52,11 @@ async function getHEM(income, dependents) {
   const json = await callAPI(url);
   const hem = json.hem;
   return hem;
-};
+}
+
+async function checkAPI() {
+  await getTax(0)
+}
 
 /**
  * Calculates the total borrowing power amount and the monthly repayment configuration
@@ -144,12 +148,14 @@ async function askAndValidate({question, validators}) {
 }
 
 async function runConsoleMode() {
-  console.log("Mortgage Borrowing Power Calculator");
-  console.log("===================================");
-
   const assessmentRate = INTEREST_RATE + ASSESSMENT_RATE_BUFFER;
 
   try {
+    await checkAPI();
+
+    console.log("Mortgage Borrowing Power Calculator");
+    console.log("===================================");
+
     let answers = {};
 
     for (const prompt of prompts) {
