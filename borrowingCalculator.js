@@ -158,7 +158,7 @@ async function runConsoleMode() {
     console.log("Mortgage Borrowing Power Calculator");
     console.log("===================================");
 
-    let answers = {};
+    const answers = {};
 
     for (const prompt of prompts) {
       answers[prompt.name] = await askAndValidate(prompt)
