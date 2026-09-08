@@ -1,4 +1,6 @@
 # Borrowing Power Calculator - Take Home Submission
+The original take-home assignment is in ASSIGNMENT.md; this file describes my approach.
+
 ## How It Works
 This borrowing power calculator receives user input and fetches data from the API defined in `server.js`, then calculates an individual's estimated borrowing power and returns a maximum loan amount and monthly repayment amount.
 
