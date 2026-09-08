@@ -7,6 +7,8 @@ const LOAN_TERM_MONTHS = 360; // 30 Years
 const INTEREST_RATE = 7.0; // 7.0% baseline interest rate
 const ASSESSMENT_RATE_BUFFER = 3.0; // 3.0% buffer added to interest rates
 
+const API_BASE = 'http://localhost:3000/api';
+const API_TOKEN = 'pat_abcdefghijklmnopqrstuvwxyz0123456789';
 const REQUEST_TIMEOUT_MS = 5000;
 
 async function callAPI(url) {
@@ -16,7 +18,7 @@ async function callAPI(url) {
     data = await fetch(url, {
       method: 'GET',
       headers: {
-        'Authorization': 'Bearer pat_abcdefghijklmnopqrstuvwxyz0123456789',
+        'Authorization': `Bearer ${API_TOKEN}`,
       },
       signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
     });
@@ -41,14 +43,14 @@ async function callAPI(url) {
 };
 
 async function getTax(income) {
-  const url = `http://localhost:3000/api/tax?income=${income}`;
+  const url = `${API_BASE}/tax?income=${income}`;
   const json = await callAPI(url);
   const tax = Math.round(json.tax);
   return tax;
 };
 
 async function getHEM(income, dependents) {
-  const url = `http://localhost:3000/api/hem?income=${income}&dependents=${dependents}`;
+  const url = `${API_BASE}/hem?income=${income}&dependents=${dependents}`;
   const json = await callAPI(url);
   const hem = json.hem;
   return hem;
