@@ -14,25 +14,25 @@ describe('Borrowing Power Calculator Tests', () => {
     assert.strictEqual(result.monthlyRepayment, 4600);
   });
 
-  it('should return 0 for invalid negative income', async () => {
+  it('should return 0 for negative income', async () => {
     const result = await calculateBorrowingPower(-100000, 3, 4000, 5000, 7.5);
     assert.strictEqual(result.maxLoanAmount, 0);
     assert.strictEqual(result.monthlyRepayment, 0);
   });
 
-  it('should return 0 for invalid negative dependents', async () => {
+  it('should return 0 for negative dependents', async () => {
     const result = await calculateBorrowingPower(100000, -3, 4000, 5000, 7.5);
     assert.strictEqual(result.maxLoanAmount, 0);
     assert.strictEqual(result.monthlyRepayment, 0);
   });
 
-  it('should return 0 for invalid negative expenses', async () => {
+  it('should return 0 for negative expenses', async () => {
     const result = await calculateBorrowingPower(100000, 3, -4000, 5000, 7.5);
     assert.strictEqual(result.maxLoanAmount, 0);
     assert.strictEqual(result.monthlyRepayment, 0);
   });
 
-  it('should return 0 for invalid negative credit limits', async () => {
+  it('should return 0 for negative credit limits', async () => {
     const result = await calculateBorrowingPower(100000, 3, 4000, -5000, 7.5);
     assert.strictEqual(result.maxLoanAmount, 0);
     assert.strictEqual(result.monthlyRepayment, 0);
