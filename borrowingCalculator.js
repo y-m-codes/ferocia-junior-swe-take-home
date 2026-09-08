@@ -17,8 +17,7 @@ async function callAPI(url) {
 
   switch (data.status) {
     case 200:
-      const json = await data.json()
-      return json
+      return await data.json()
     case 401:
       throw new Error("Error: You are not authorised to access this data")
     case 400:
